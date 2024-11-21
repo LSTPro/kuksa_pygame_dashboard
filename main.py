@@ -113,7 +113,7 @@ while running:
     speed_text = font.render(f"Speed: {math.floor(current_speed)} km/h", True, WHITE)
     screen.blit(speed_text, (50, 250))  # Adjust the position if needed
 
-    speed_text = font.render(f"Anamoly: {anamoly} ", True, WHITE)
+    speed_text = font.render(f"Anomaly: {anamoly} ", True, WHITE)
     screen.blit(speed_text, (50, 300))  # Adjust the position if needed
 
 
