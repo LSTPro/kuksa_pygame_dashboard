@@ -8843,11 +8843,11 @@
                                 "description": "Indicates if Anomaly occured. True = Anamoly. False = Disabled.",
                                 "type": "actuator",
                                 "uuid": "1aa08e1ca1e941d589eca582b1e3e16f"
-                            },
-                            "description": "",
-                            "type": "branch",
-                            "uuid":"5288a23759f34802bb4906cad632a13d"
-                }
+                            }
+                },
+                "description": "",
+                "type": "branch",
+                "uuid": "5288a23759f34802bb4906cad632a13d"
             }
         },
         "description": "High-level vehicle data.",
