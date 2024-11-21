@@ -22,7 +22,7 @@ GRAY = (200, 200, 200)
 font = pygame.font.SysFont("Arial", 24)
 
 # Shared vehicle values and lock
-values = {"speed": 0, "brake": 0, "acceleration": 0, "steering_angle": 0}
+values = {"speed": 0, "brake": 0, "acceleration": 0, "steering_angle": 0,'anamoly':False}
 speed_lock = Lock()
 
 # Utility function to draw a needle for steering angle
@@ -44,7 +44,8 @@ def start_kuksa_client():
             for updates in client.subscribe_current_values(['Vehicle.Speed', 
                                                             'Vehicle.Chassis.Brake.PedalPosition', 
                                                             'Vehicle.Chassis.Accelerator.PedalPosition', 
-                                                            'Vehicle.Chassis.Axle.Row1.SteeringAngle']):
+                                                            'Vehicle.Chassis.Axle.Row1.SteeringAngle',
+                                                            'Vehicle.Analytics.Anamoly']):
                 with speed_lock:
                     # Update speed
                     if updates.get('Vehicle.Speed') and updates['Vehicle.Speed'].value:
@@ -61,6 +62,9 @@ def start_kuksa_client():
                     # Update steering angle
                     if updates.get('Vehicle.Chassis.Axle.Row1.SteeringAngle') and updates['Vehicle.Chassis.Axle.Row1.SteeringAngle'].value:
                         values["steering_angle"] = updates['Vehicle.Chassis.Axle.Row1.SteeringAngle'].value
+                        # Update steering angle
+                    if updates.get('Vehicle.Analytics.Anamoly') and str(updates['Vehicle.Analytics.Anamoly'].value):
+                        values["anamoly"] = updates['Vehicle.Analytics.Anamoly'].value
     except Exception as e:
         print(f"Kuksa client error: {e}", flush=True)
 
@@ -85,6 +89,7 @@ while running:
         throttle = values["acceleration"]
         brake = values["brake"]
         steering_angle = values["steering_angle"]
+        anamoly =  values["anamoly"]
 
     # Draw throttle bar
     pygame.draw.rect(screen, GRAY, (50, 50, 200, 30))  # Background
@@ -100,13 +105,17 @@ while running:
 
     # Draw steering angle
     pygame.draw.circle(screen, GRAY, (400, 200), 100)  # Steering wheel
-    draw_needle((400, 200), -steering_angle, 90)  # Needle
-    steering_text = font.render(f"Steering: {steering_angle}°", True, WHITE)
+    draw_needle((400, 200), -math.floor(steering_angle*100), 90)  # Needle
+    steering_text = font.render(f"Steering: {math.floor(steering_angle*100)}°", True, WHITE)
     screen.blit(steering_text, (350, 310))
 
     # Display current speed as a number
-    speed_text = font.render(f"Speed: {current_speed} km/h", True, WHITE)
+    speed_text = font.render(f"Speed: {math.floor(current_speed)} km/h", True, WHITE)
     screen.blit(speed_text, (50, 250))  # Adjust the position if needed
+
+    speed_text = font.render(f"Anamoly: {anamoly} ", True, WHITE)
+    screen.blit(speed_text, (50, 300))  # Adjust the position if needed
+
 
     # Update display
     pygame.display.flip()
