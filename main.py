@@ -3,10 +3,9 @@ import sys
 import math
 from kuksa_client.grpc import VSSClient
 from threading import Thread, Lock
-
+import os
 # Initialize Pygame
 pygame.init()
-
 # Screen dimensions
 WIDTH, HEIGHT = 600, 400
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -38,7 +37,9 @@ def draw_needle(center, angle, radius, color=RED):
 # Kuksa client thread to fetch vehicle data
 def start_kuksa_client():
     try:
-        with VSSClient('192.168.46.210', 55555) as client:
+        broker_address = os.getenv('BROKER_ADDRESS')
+        broker_port = int(os.getenv('BROKER_PORT'))
+        with VSSClient(broker_address, broker_port) as client:
             # Subscribe to vehicle parameters
             for updates in client.subscribe_current_values(['Vehicle.Speed', 
                                                             'Vehicle.Chassis.Brake.PedalPosition', 

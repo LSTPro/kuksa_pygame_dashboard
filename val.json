@@ -8835,6 +8835,14 @@
                 "type": "attribute",
                 "unit": "mm",
                 "uuid": "b4aabe144e3259adb1459a2e25fec9bd"
+            },
+            "Analytics":{
+                "children":{
+                    "datatype": "boolean",
+                    "description": "Indicates if Anomaly occured. True = Anamoly. False = Disabled.",
+                    "type": "actuator",
+                    "uuid": "1aa08e1ca1e941d589eca582b1e3e16f"
+                }
             }
         },
         "description": "High-level vehicle data.",
