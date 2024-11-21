@@ -23,6 +23,7 @@ font = pygame.font.SysFont("Arial", 24)
 
 # Shared vehicle values and lock
 values = {"speed": 0, "brake": 0, "acceleration": 0, "steering_angle": 0,'anamoly':False}
+anomaly_count = 0
 speed_lock = Lock()
 
 # Utility function to draw a needle for steering angle
@@ -36,6 +37,7 @@ def draw_needle(center, angle, radius, color=RED):
 
 # Kuksa client thread to fetch vehicle data
 def start_kuksa_client():
+    global anomaly_count
     try:
         broker_address = os.getenv('BROKER_ADDRESS')
         broker_port = int(os.getenv('BROKER_PORT'))
@@ -65,6 +67,8 @@ def start_kuksa_client():
                         # Update steering angle
                     if updates.get('Vehicle.Analytics.Anamoly') and str(updates['Vehicle.Analytics.Anamoly'].value):
                         values["anamoly"] = updates['Vehicle.Analytics.Anamoly'].value
+                        if updates['Vehicle.Analytics.Anamoly'].value:
+                            anomaly_count = anomaly_count + 1
     except Exception as e:
         print(f"Kuksa client error: {e}", flush=True)
 
@@ -115,6 +119,9 @@ while running:
 
     speed_text = font.render(f"Anomaly: {anamoly} ", True, WHITE)
     screen.blit(speed_text, (50, 300))  # Adjust the position if needed
+
+    speed_text = font.render(f"Anomaly count: {anomaly_count} ", True, WHITE)
+    screen.blit(speed_text, (50, 350))  # Adjust the position if needed
 
 
     # Update display
