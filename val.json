@@ -8838,10 +8838,12 @@
             },
             "Analytics":{
                 "children":{
-                    "datatype": "boolean",
-                    "description": "Indicates if Anomaly occured. True = Anamoly. False = Disabled.",
-                    "type": "actuator",
-                    "uuid": "1aa08e1ca1e941d589eca582b1e3e16f"
+                    "Anamoly":{
+                                "datatype": "boolean",
+                                "description": "Indicates if Anomaly occured. True = Anamoly. False = Disabled.",
+                                "type": "actuator",
+                                "uuid": "1aa08e1ca1e941d589eca582b1e3e16f"
+                            }
                 }
             }
         },
